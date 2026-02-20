@@ -14,21 +14,26 @@
       </p>
 
       <section class="panel">
-        <h2>Prefix List Data</h2>
+        <h2>Prefix-list Inputs</h2>
         <div class="grid">
           <label>
-            Cloud Prefixes (one CIDR per line)
+            CLOUD_PREFIXES (one CIDR per line)
             <textarea id="cloudPrefixes" placeholder="10.23.0.0/22&#10;10.23.4.0/22"></textarea>
           </label>
 
           <label>
-            SD-WAN Summaries (one CIDR per line)
+            SDWAN_SUMMARIES (one CIDR per line)
             <textarea id="sdwanSummaries" placeholder="10.0.0.0/8&#10;172.16.0.0/12"></textarea>
           </label>
 
           <label>
-            Range of Allowed SD-WAN Specifics (one CIDR per line with "ge" and starting minimum length)
-            <textarea id="sdwanSpecifics" placeholder="10.0.0.0/8 ge 9"></textarea>
+            SDWAN_SPECIFICS (one CIDR per line)
+            <textarea id="sdwanSpecifics" placeholder="10.0.0.0/8"></textarea>
+          </label>
+
+          <label>
+            Greater than or Equal to
+            <input id="sdwanSpecificsGe" type="number" min="0" max="32" value="9" />
           </label>
 
           <label>
@@ -39,10 +44,10 @@
       </section>
 
       <section class="panel">
-        <h2>Route Policy</h2>
+        <h2>Route-map Inputs</h2>
         <div class="grid grid-3">
           <label>
-            Local Router's Global Priority for SD-WAN Ingress (1-10 and influences as-prepending)
+            Global Priority (1-10)
             <input id="globalPriority" type="number" min="1" max="10" value="1" />
           </label>
 
