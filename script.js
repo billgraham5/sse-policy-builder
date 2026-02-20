@@ -1,23 +1,24 @@
 const byId = (id) => document.getElementById(id);
 
-const parseLines = (value) =>
+const parseCidrs = (value) =>
   value
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
 
-const buildPrefixList = ({ name, entries }) => {
+const buildPrefixList = ({ name, entries, geValue }) => {
   const lines = [];
-
-  entries.forEach((entry, index) => {
+  entries.forEach((cidr, index) => {
     const seq = (index + 1) * 5;
-    lines.push(`ip prefix-list ${name} seq ${seq} permit ${entry}`);
+    if (geValue !== undefined && geValue !== null && geValue !== "") {
+      lines.push(`ip prefix-list ${name} seq ${seq} permit ${cidr} ge ${geValue}`);
+    } else {
+      lines.push(`ip prefix-list ${name} seq ${seq} permit ${cidr}`);
+    }
   });
-
   if (lines.length) {
     lines.push("!");
   }
-
   return lines;
 };
 
@@ -77,11 +78,12 @@ const buildRouteMaps = ({ azureNextHop, localAsn, globalPriority }) => {
 };
 
 const generateConfig = () => {
-  const cloudPrefixes = parseLines(byId("cloudPrefixes").value);
-  const sdwanSummaries = parseLines(byId("sdwanSummaries").value);
-  const sdwanSpecifics = parseLines(byId("sdwanSpecifics").value);
-  const ssePrefixes = parseLines(byId("ssePrefixes").value);
+  const cloudPrefixes = parseCidrs(byId("cloudPrefixes").value);
+  const sdwanSummaries = parseCidrs(byId("sdwanSummaries").value);
+  const sdwanSpecifics = parseCidrs(byId("sdwanSpecifics").value);
+  const ssePrefixes = parseCidrs(byId("ssePrefixes").value);
 
+  const sdwanSpecificsGe = byId("sdwanSpecificsGe").value;
   const globalPriority = byId("globalPriority").value;
   const localAsn = byId("localAsn").value.trim();
   const azureNextHop = byId("azureNextHop").value.trim() || "0.0.0.0";
@@ -89,12 +91,13 @@ const generateConfig = () => {
   const prefixLines = [
     ...buildPrefixList({ name: "CLOUD_PREFIXES", entries: cloudPrefixes }),
     ...buildPrefixList({ name: "SDWAN_SUMMARIES", entries: sdwanSummaries }),
-    ...buildPrefixList({ name: "SDWAN_SPECIFICS", entries: sdwanSpecifics }),
+    ...buildPrefixList({ name: "SDWAN_SPECIFICS", entries: sdwanSpecifics, geValue: sdwanSpecificsGe }),
     ...buildPrefixList({ name: "SSE_PREFIXES", entries: ssePrefixes }),
   ];
 
   const routeMapLines = buildRouteMaps({ azureNextHop, localAsn, globalPriority });
-  byId("output").textContent = [...prefixLines, ...routeMapLines].join("\n");
+  const output = [...prefixLines, ...routeMapLines].join("\n");
+  byId("output").textContent = output;
 };
 
 byId("generateBtn").addEventListener("click", generateConfig);
