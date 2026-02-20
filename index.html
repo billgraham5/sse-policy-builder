@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE Policy Builder for IOS-XE</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>SSE Policy Builder for IOS-XE</h1>
+      <p class="subtitle">
+        Build IOS-XE prefix-lists and route-maps for cloud/SD-WAN/SSE policy workflows.
+      </p>
+
+      <section class="panel">
+        <h2>Prefix-list Inputs</h2>
+        <div class="grid">
+          <label>
+            CLOUD_PREFIXES (one CIDR per line)
+            <textarea id="cloudPrefixes" placeholder="10.23.0.0/22&#10;10.23.4.0/22"></textarea>
+          </label>
+
+          <label>
+            SDWAN_SUMMARIES (one CIDR per line)
+            <textarea id="sdwanSummaries" placeholder="10.0.0.0/8&#10;172.16.0.0/12"></textarea>
+          </label>
+
+          <label>
+            SDWAN_SPECIFICS (one CIDR per line)
+            <textarea id="sdwanSpecifics" placeholder="10.0.0.0/8"></textarea>
+          </label>
+
+          <label>
+            Greater than or Equal to
+            <input id="sdwanSpecificsGe" type="number" min="0" max="32" value="9" />
+          </label>
+
+          <label>
+            SSE VPN Pool Summaries
+            <textarea id="ssePrefixes" placeholder="10.6.0.0/16"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Route-map Inputs</h2>
+        <div class="grid grid-3">
+          <label>
+            Global Priority (1-10)
+            <input id="globalPriority" type="number" min="1" max="10" value="1" />
+          </label>
+
+          <label>
+            Local Router ASN
+            <input id="localAsn" type="number" min="1" placeholder="65000" />
+          </label>
+
+          <label>
+            Azure VNET Gateway IP address
+            <input id="azureNextHop" type="text" placeholder="10.23.0.193" />
+          </label>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button id="generateBtn">Generate Configuration</button>
+        <button id="copyBtn" type="button">Copy Output</button>
+        <button id="downloadBtn" type="button">Download .txt</button>
+      </section>
+
+      <section class="panel">
+        <h2>Config Generation</h2>
+        <pre id="output" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
