@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE Policy Builder for IOS-XE</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>SSE Policy Builder for IOS-XE</h1>
+      <p class="subtitle">
+        Build IOS-XE prefix-lists and route-maps for cloud/SD-WAN/SSE policy workflows.
+      </p>
+
+      <section class="panel">
+        <h2>Prefix List Data</h2>
+        <div class="grid">
+          <label>
+            Cloud Prefixes (one CIDR per line)
+            <textarea id="cloudPrefixes" placeholder="10.23.0.0/22&#10;10.23.4.0/22"></textarea>
+          </label>
+
+          <label>
+            SD-WAN Summaries (one CIDR per line)
+            <textarea id="sdwanSummaries" placeholder="10.0.0.0/8&#10;172.16.0.0/12"></textarea>
+          </label>
+
+          <label>
+            Range of Allowed SD-WAN Specifics (one CIDR per line with "ge" and starting minimum length)
+            <textarea id="sdwanSpecifics" placeholder="10.0.0.0/8 ge 9"></textarea>
+          </label>
+
+          <label>
+            SSE VPN Pool Summaries
+            <textarea id="ssePrefixes" placeholder="10.6.0.0/16"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Route Policy</h2>
+        <div class="grid grid-3">
+          <label>
+            Local Router's Global Priority for SD-WAN Ingress (1-10 and influences as-prepending)
+            <input id="globalPriority" type="number" min="1" max="10" value="1" />
+          </label>
+
+          <label>
+            Local Router ASN
+            <input id="localAsn" type="number" min="1" placeholder="65000" />
+          </label>
+
+          <label>
+            Azure VNET Gateway IP address
+            <input id="azureNextHop" type="text" placeholder="10.23.0.193" />
+          </label>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button id="generateBtn">Generate Configuration</button>
+        <button id="copyBtn" type="button">Copy Output</button>
+        <button id="downloadBtn" type="button">Download .txt</button>
+      </section>
+
+      <section class="panel">
+        <h2>Config Generation</h2>
+        <pre id="output" class="output"></pre>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
